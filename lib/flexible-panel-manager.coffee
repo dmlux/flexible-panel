@@ -16,9 +16,10 @@ class FlexiblePanelManager
     config.URI = "atom://flexible-panel-view-UID#{config.UID}"
 
     @subscriptions.add atom.workspace.addOpener (URI) =>
-      panel = new FlexiblePanelView(config) if URI is "atom://flexible-panel-view-UID#{config.UID}"
-      @panels.push panel
-      panel
+      if URI is "atom://flexible-panel-view-UID#{config.UID}"
+        panel = new FlexiblePanelView config
+        @panels.push panel
+        panel
 
     atom.workspace.toggle(config.URI)
 

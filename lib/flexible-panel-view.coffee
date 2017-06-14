@@ -1,37 +1,33 @@
 {CompositeDisposable, Disposable} = require 'atom'
 
+PanelControls = require './panel-controls'
+TableView = require './table-view'
+
 module.exports =
 class FlexiblePanelView
 
   constructor: (@config) ->
+    @config.defaultLocation ?= 'bottom'
+    @config.allowedLocations ?= ['bottom']
+    @config.columns ?= []
+
+    for col, idx in @config.columns
+      col.align ?= 'left'
+      col.name ?= "Column #{idx + 1}"
+
     @element = document.createElement 'div'
     @element.classList.add 'flexible-panel'
 
-    panelControls = document.createElement 'div'
-    panelControls.classList.add 'panel-controls'
+    panelControls = new PanelControls
+    @element.appendChild panelControls.getView()
 
-    input = document.createElement 'input'
-    input.classList.add 'input-search', 'native-key-bindings'
-    input.type = 'search'
-    input.placeholder = 'Filter'
+    panelControls.setSaveListener @_onSave
+    panelControls.setClearListener @_onClear
+    panelControls.setFilterListener @_onFilter
 
-    clearBtn = document.createElement 'a'
-    clearBtn.classList.add 'btn', 'icon', 'icon-file-text', 'inline-block-tight', 'float-right'
-    clearBtn.innerHTML = 'clear'
+    @tableView = new TableView @config.columns
 
-    saveBtn = document.createElement 'a'
-    saveBtn.classList.add 'btn', 'icon', 'icon-desktop-download', 'inline-block-tight'
-    saveBtn.innerHTML = 'save'
-
-    panelControls.appendChild input
-    panelControls.appendChild clearBtn
-    panelControls.appendChild saveBtn
-
-    @element.appendChild panelControls
-
-    input.addEventListener 'input', @_onFilter
-    saveBtn.addEventListener 'click', @_onSave
-    clearBtn.addEventListener 'click', @_onClear
+    @element.appendChild @tableView.getView()
 
 
   _onClear: ->
@@ -49,6 +45,10 @@ class FlexiblePanelView
 
     event.preventDefault()
     event.stopPropagation()
+
+
+  addEntry: (entry) ->
+    @tableView.addRow entry
 
 
   getTitle: ->
