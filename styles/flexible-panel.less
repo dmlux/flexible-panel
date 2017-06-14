@@ -5,4 +5,24 @@
 @import "ui-variables";
 
 .flexible-panel {
+
+  .panel-controls {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
+    padding: 5px;
+    background: @app-background-color;
+    border-bottom: 1px solid @base-border-color;
+    -webkit-user-select: none;
+
+    .input-search {
+      //width: 350px;
+      margin-right: @component-padding;
+    }
+
+    .btn.float-right {
+      margin-left: auto;
+      margin-right: 3px;
+    }
+  }
 }

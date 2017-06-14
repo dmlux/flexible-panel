@@ -4,42 +4,72 @@ module.exports =
 class FlexiblePanelView
 
   constructor: (@config) ->
-    # Create root element
     @element = document.createElement 'div'
-    @element.classList.add 'flexible-panel-wrapper'
-    @element.innerHTML = 'Test'
+    @element.classList.add 'flexible-panel'
 
-    # keep track of disposables
-    @subscriptions = new CompositeDisposable
+    panelControls = document.createElement 'div'
+    panelControls.classList.add 'panel-controls'
 
-    console.log "FlexiblePanelView created with #{@config.URI} with URI = atom://flexible-panel-view-UID#{@config.UID}"
-    console.log @config
+    input = document.createElement 'input'
+    input.classList.add 'input-search', 'native-key-bindings'
+    input.type = 'search'
+    input.placeholder = 'Filter'
 
-  # Toggle
-  toggle: ->
-    atom.workspace.toggle @config.URI
+    clearBtn = document.createElement 'a'
+    clearBtn.classList.add 'btn', 'icon', 'icon-file-text', 'inline-block-tight', 'float-right'
+    clearBtn.innerHTML = 'clear'
 
-  # provides a title to the panel
+    saveBtn = document.createElement 'a'
+    saveBtn.classList.add 'btn', 'icon', 'icon-desktop-download', 'inline-block-tight'
+    saveBtn.innerHTML = 'save'
+
+    panelControls.appendChild input
+    panelControls.appendChild clearBtn
+    panelControls.appendChild saveBtn
+
+    @element.appendChild panelControls
+
+    input.addEventListener 'input', @_onFilter
+    saveBtn.addEventListener 'click', @_onSave
+    clearBtn.addEventListener 'click', @_onClear
+
+
+  _onClear: ->
+    console.log 'clear content'
+
+
+  _onSave: ->
+    console.log 'save content'
+
+
+  _onFilter: (event) =>
+    filter = event.srcElement.value
+
+    console.log filter, @element
+
+    event.preventDefault()
+    event.stopPropagation()
+
+
   getTitle: ->
     @config.title
 
-  # the URI which corresponds to the panel
+
   getURI: ->
     @config.URI
 
-  # the standard location in which dock the panel will be created
+
   getDefaultLocation: ->
     @config.defaultLocation
 
-  # all locations where the panel can be placed
+
   getAllowedLocations: ->
     @config.allowedLocations
 
-  # Tear down any state and detach
+
   destroy: ->
     @element.remove()
-    @subscriptions.dispose()
 
-  # returns the content of this view element
+
   getElement: ->
     @element

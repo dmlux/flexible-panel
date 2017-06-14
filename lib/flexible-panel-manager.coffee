@@ -16,11 +16,12 @@ class FlexiblePanelManager
     config.URI = "atom://flexible-panel-view-UID#{config.UID}"
 
     @subscriptions.add atom.workspace.addOpener (URI) =>
-      panel = new FlexiblePanelView config if URI is "atom://flexible-panel-view-UID#{config.UID}"
+      panel = new FlexiblePanelView(config) if URI is "atom://flexible-panel-view-UID#{config.UID}"
       @panels.push panel
       panel
 
-    atom.workspace.toggle config.URI
+    atom.workspace.toggle(config.URI)
 
   destroy: ->
+    panel.destroy() for panel in @panels
     @subscriptions.dispose()

@@ -3,28 +3,31 @@ FlexibleViewManager = require './flexible-panel-manager'
 {CompositeDisposable} = require 'atom'
 
 module.exports = FlexiblePanel =
-  flexiblePanelView: null
-
   activate: ->
     @flexibleViewManager = new FlexibleViewManager
-    @consoleView = @flexibleViewManager.createFlexiblePanel {
+
+    @consoleView = null
+    @flexibleViewManager.createFlexiblePanel {
       title: 'Console'
       defaultLocation: 'bottom',
       allowedLocations: ['bottom', 'right']
     }
+    .then (view) =>
+      @consoleView = view
 
-    @warningsView = @flexibleViewManager.createFlexiblePanel {
+    @warningsView = null
+    @flexibleViewManager.createFlexiblePanel {
       title: 'Warnings'
       defaultLocation: 'bottom',
       allowedLocations: ['bottom', 'right']
     }
+    .then (view) =>
+      @warningsView = view
 
     # add toggle command to subscriptions
     @subscriptions = new CompositeDisposable
     @subscriptions.add atom.commands.add 'atom-workspace',
       'flexible-panel:toggle': => @toggle()
-
-    console.log @
 
   deactivate: ->
     @flexiblePanelView.destroy()
