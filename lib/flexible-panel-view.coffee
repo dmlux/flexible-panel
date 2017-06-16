@@ -18,30 +18,39 @@ class FlexiblePanelView
     @element = document.createElement 'div'
     @element.classList.add 'flexible-panel'
 
-    panelControls = new PanelControls
+    panelConfig = {}
+    panelConfig.addSaveButton = @config.addSaveButton if @config.addSaveButton?
+    panelConfig.addClearButton = @config.addClearButton if @config.addClearButton?
+
+    panelControls = new PanelControls panelConfig
     @element.appendChild panelControls.getView()
 
-    panelControls.setSaveListener @_onSave
-    panelControls.setClearListener @_onClear
     panelControls.setFilterListener @_onFilter
+    panelControls.setClearListener @_onClear
+    panelControls.setSaveListener @_onSave
 
     @tableView = new TableView @config.columns
-
     @element.appendChild @tableView.getView()
 
-
-  _onClear: ->
+  _onClear: (event) =>
     console.log 'clear content'
 
+    @tableView.clear()
 
-  _onSave: ->
+    event.preventDefault()
+    event.stopPropagation()
+
+  _onSave: (event) =>
     console.log 'save content'
+
+    event.preventDefault()
+    event.stopPropagation()
 
 
   _onFilter: (event) =>
     filter = event.srcElement.value
 
-    console.log filter, @element
+    console.log filter
 
     event.preventDefault()
     event.stopPropagation()

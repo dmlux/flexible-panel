@@ -5,6 +5,8 @@
 @import "ui-variables";
 
 .flexible-panel {
+  display: flex;
+  flex-direction: column;
 
   .panel-controls {
     display: flex;
@@ -20,56 +22,100 @@
       margin-right: @component-padding;
     }
 
+    .btn {
+      margin-left: 3px;
+    }
+
     .btn.float-right {
       margin-left: auto;
-      margin-right: 3px;
+      margin-right: 0px;
     }
   }
 
-  .table {
-    display: table;
-    border-collapse: collapse;
-    border-bottom: 1px solid @base-border-color;
-    margin: 0px;
+  .table-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    // font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+
+    .table-head-wrapper {
+      display: block;
+      flex: 0;
+    }
+
+    .table-body-wrapper {
+      display: block;
+      flex: 1 1 auto;
+      overflow-y: auto;
+
+      .table .tr:first-child .td {
+        border-top: none !important;
+      }
+
+      .table .tr:last-child .td {
+        border-bottom: 1px solid @base-border-color;
+      }
+    }
+
+    .table {
+      display: table;
+      table-layout: auto;
+      margin: 0px;
+      border-collapse: collapse;
+    }
+
+    .tr {
+      display: table-row;
+    }
+
+    .td {
+      display: table-cell;
+      padding: 2px 5px;
+      border-left: 1px solid @base-border-color;
+      border-top: 1px solid @base-border-color;
+      vertical-align: middle;
+      white-space: pre-wrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .td:first-child {
+      border-left: none;
+    }
+
+    .td:last-child {
+      padding-right: 15px !important;
+    }
+
+    .td.align-center {
+      text-align: center;
+    }
+
+    .td.align-left {
+      text-align: left;
+    }
+
+    .td.align-right {
+      text-align: right;
+    }
 
     .thead {
       display: table-header-group;
       background-color: @base-background-color;
-      border-bottom: 2px solid @base-border-color;
       font-weight: bold;
+
+      .td {
+        border-bottom: 2px solid @base-border-color;
+        border-top: none;
+        padding: 2px 5px;
+      }
     }
 
     .tbody {
       display: table-row-group;
-    }
 
-    .thead, .tbody {
-      .tr {
-        display: table-row;
-
-        .td {
-          display: table-cell;
-          padding: 2px 4px;
-          border-left: 1px solid @base-border-color;
-          border-top: 1px solid @base-border-color;
-          white-space: pre-wrap;
-        }
-
-        .td:first-of-type {
-          border-left: none;
-        }
-
-        .td.align-right {
-          text-align: right;
-        }
-
-        .td.align-left {
-          text-align: left;
-        }
-
-        .td.align-center {
-          text-align: center;
-        }
+      .tr:hover {
+        color: @text-color-highlight;
       }
     }
   }
