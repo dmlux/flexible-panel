@@ -14,6 +14,9 @@ class FlexiblePanelView
     for col, idx in @config.columns
       col.align ?= 'left'
       col.name ?= "Column #{idx + 1}"
+      col.fixedWidth ?= 0
+      col.indentWrappedText ?= no
+      col.type ?= 'text'
 
     @element = document.createElement 'div'
     @element.classList.add 'flexible-panel'
@@ -29,7 +32,14 @@ class FlexiblePanelView
     panelControls.setClearListener @_onClear
     panelControls.setSaveListener @_onSave
 
-    @tableView = new TableView @config.columns
+    tableConfig = {}
+    tableConfig.maxLines = @config.maxLines if @config.maxLines?
+    tableConfig.hideTableHead = @config.hideTableHead if @config.hideTableHead?
+    tableConfig.hideCellBorders = @config.hideCellBorders if @config.hideCellBorders?
+    tableConfig.hideVerticalCellBorders = @config.hideVerticalCellBorders if @config.hideVerticalCellBorders?
+    tableConfig.hideHorizontalCellBorders = @config.hideHorizontalCellBorders if @config.hideHorizontalCellBorders?
+
+    @tableView = new TableView @config.columns, tableConfig
     @element.appendChild @tableView.getView()
 
   _onClear: (event) =>

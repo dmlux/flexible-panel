@@ -18,7 +18,7 @@ class PanelControls
 
     if @config.addClearButton
       @clearBtn = document.createElement 'a'
-      @clearBtn.classList.add 'btn', 'icon', 'icon-file-text', 'inline-block-tight', 'float-right'
+      @clearBtn.classList.add 'btn', 'icon', 'icon-circle-slash', 'inline-block-tight', 'float-right'
       @clearBtn.innerHTML = 'clear'
       @element.appendChild @clearBtn
 

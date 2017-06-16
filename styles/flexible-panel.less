@@ -38,9 +38,28 @@
     flex: 1 1 auto;
     // font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
+    .empty-message {
+      flex: 0 0 auto;
+      display: block;
+      padding: 5px;
+      text-align: center;
+      font-style: italic;
+      color: @text-color-subtle;
+    }
+
+    .empty-message.hidden {
+      visibility: hidden;
+      display: none;
+    }
+
     .table-head-wrapper {
       display: block;
       flex: 0;
+    }
+
+    .table-head-wrapper.visibility-hidden {
+      visibility: hidden;
+      display: none;
     }
 
     .table-body-wrapper {
@@ -77,6 +96,48 @@
       white-space: pre-wrap;
       overflow-x: hidden;
       text-overflow: ellipsis;
+
+      div.cell-content {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+
+        span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+
+      div.cell-content.indent-wrapped-text {
+        padding-left: 20px;
+        text-indent: -10px;
+      }
+
+      div.pseudo {
+        content: '';
+        height: 100%;
+        background: red;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    .td.no-thead {
+      background: @base-background-color;
+    }
+
+    .td.no-borders {
+      border: none;
+    }
+
+    .td.no-vertical-borders {
+      border-left: none;
+      border-right: none;
+    }
+
+    .td.no-horizontal-borders {
+      border-bottom: none;
+      border-top: none;
     }
 
     .td:first-child {
@@ -105,7 +166,7 @@
       font-weight: bold;
 
       .td {
-        border-bottom: 2px solid @base-border-color;
+        border-bottom: 2px solid @base-border-color !important;
         border-top: none;
         padding: 2px 5px;
       }
