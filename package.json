@@ -1,12 +1,12 @@
 {
-  "name": "flexible-panel",
+  "name": "flexible-panels",
   "main": "./lib/flexible-panel",
   "version": "0.0.0",
-  "description": "A short description of your package",
-  "keywords": [],
-  "activationCommands": {
-    "atom-workspace": "flexible-panel:toggle"
-  },
+  "description": "An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17",
+  "keywords": [
+    "console", "message-panel", "panel", "message", "flexible", "configurable", "service"
+    "label", "text", "time", "log", "docks", "dock"
+  ],
   "repository": "https://github.com/atom/flexible-panel",
   "license": "MIT",
   "engines": {
@@ -15,5 +15,13 @@
   "dependencies": {
     "element-resize-detector": "^1.1.12",
     "fs": "0.0.1-security"
+  },
+  "providedServices": {
+    "flexible-panels": {
+      "description": "A manager for creating flexible panel views",
+      "versions": {
+        "1.17.0": "provideFlexiblePanels"
+      }
+    }
   }
 }
