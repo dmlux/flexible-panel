@@ -1,5 +1,4 @@
 # Atom Flexible-Panels
-
 An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17
 
 <p align="left">
@@ -14,13 +13,10 @@ An Atom package that provides a customizable panel for Atoms Docks introduced wi
 
 
 ## Introduction
-
 An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17. This panel can log all kind of information and displays them as a table. The table columns can be customized before panel creation to provide a simple insert logic. Once a specific configuration is attached to a column all its added contents will get the same configuration and hence will get the same style. The Flexible-Panel view also provides special column types like time columns or label columns. For further information see the examples section.
 
 ## Set Up
-
 To be able to use Flexible-Panels in your project you have to include the following properties to your `package.json` file
-
 ```json
 "consumedServices": {
   "flexible-panels": {
@@ -30,7 +26,6 @@ To be able to use Flexible-Panels in your project you have to include the follow
   }
 }
 ```
-
 You should have installed this package to consume the service mentioned in the property above. If you develop packages and need this package as a dependency we recommend using the `npm` library [Atom-Package-Deps](https://www.npmjs.com/package/atom-package-deps).
 
 In your main package file you should also include the following function in Coffeescript:
@@ -54,15 +49,12 @@ The `consumeFlexiblePanels` function is called once your package gets activated.
 
 
 ## API
-
 The following classes and methods can be used to interact with Flexible-Panel instances.
 
 ### `FlexiblePanelManager`
-
 A class that is able to create a Flexible-Panel view. It keeps track of all created views and will clean up on destruction. To get correctly working Flexible-Panel views only create those views via this manager.
 
 #### `::createFlexiblePanel(config)`
-
 Creates a new Flexible-Panel view instance that will be embedded into workspace automatically. The config object contains settings for the Flexible-Panel view that will be created. The following settings can be changed via the config object:
 
 * `addClearButton` `<boolean>` Adds a button that can clear the table entries. The default value is set to `yes`/`true`.
@@ -87,9 +79,39 @@ The column specification array contains an object of properties for each column.
 * `fixedWidth` `<number>` Specifies the absolute width. If this value is set to a number unequals 0 then the column will keep this size even if the table size changes. If the value is set to 0 the column width will be set dynamically. The default value is `0`.
 
   **Note**: If all columns in the table will have dynamic column widths the result may not be as expected. Therefore it makes sense to fix some columns in size and let the other columns take up the rest of available width.
-* `indentWrappedText` `<boolean>` If this value is set to true the text which is wrapped automatically will be indented to the right. This increases readability for columns containing long texts. The default value is `no`.
+* `indentWrappedText` `<boolean>` If this value is set to `yes`/`true` the text which is wrapped automatically will be indented to the right. This increases readability for columns containing long texts. The default value is `no`.
 * `name` `<string>` This property specifies the name of the column. The name will be displayed in the fixed table header. The default value is `Column <number>` where number is the index of the column starting with `1`;
 * `type` `<string>` This property specifies which type of data is displayed in the column. The value should be `text`, `label` or `time` where `text` represents plain text, `label` is a colored text badge and `time` is the time when the entry was inserted into the table.
+
+The label specification is similar to the column specification. A label is colored rectangle filling the available width and height of the table cell. The label is colored as specified. Labels allowing users to get a quick overview of what information was entered the table view without reading contents in detail. Each object in the label array should has the following properties:
+
+* `background` `<string>` The background color in CSS representation. The default value is `inherit`.
+* `color` `<string>` The font color in CSS representation. The default value is `inherit`.
+* `type` `<string>` The label identifier as well as the text that gets displayed in the table view. The default value is `none`.
+
+### `FlexiblePanelView`
+The class represents the actual Flexible-Panel view.
+
+#### `::addEntry(entry)`
+This method adds an entry to the table view.
+
+* `entry` `<array<string>>` The entry array contains a string for each column in the table. If the array contains less strings than the table has columns it gets filled with empty strings.
+
+  **Note**: If a column in the table is of type `time` then it does not matter which value the entry contains on this position in the array since it gets overwritten with the current time value. If the column is of type label the string should match on in the labels specification array passed to the `FlexiblePanelManager` on Flexible-Panel view creation.
+
+#### `::getTitle()`
+Returns the title of the given Flexible-Panel.
+
+#### `::getURI()`
+Returns the unique URI of the given Flexible-Panel.
+
+#### `::getDefaultLocation()`
+Returns the default location of the given Flexible-Panel
+
+#### `::getAllowedLocations()`
+Returns an array of allowed locations of the given Flexible-Panel
+
+
 
 ## Examples
 
