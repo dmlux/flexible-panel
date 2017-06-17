@@ -47,7 +47,7 @@ If you are coding in Javascript instead the following function has to be added:
     // Create flexible panel view and add entries here...
   }
 ```
-It is important that the consume function gets exported. In the example above we assume that the function is included in the export default scope. If you separately export each function you have to add an export to the consume function.
+It is important that the consume function gets exported. In the example above we assume that the function is included in the export default scope. If you separately export each function you also have to add an export to the consume function.
 
 The `consumeFlexiblePanels` function is called once your package gets activated. It will give you a `FlexiblePanelManager` object as an argument. You can use the manager to create new Flexible-Panel-Views.
 
@@ -63,9 +63,29 @@ A class that is able to create a Flexible-Panel view. It keeps track of all crea
 
 #### `::createFlexiblePanel(config)`
 
-Creates a new Flexible-Panel view instance that will be embedded into workspace automatically.
+Creates a new Flexible-Panel view instance that will be embedded into workspace automatically. The config object contains settings for the Flexible-Panel view that will be created. The following settings can be changed via the config object:
 
+* `addClearButton` Adds a button that can clear the table entries. The default value is set to `yes`/`true`.
+* `addSaveButton` Adds a button that will save the table contents. The default value is set to `yes`/`true`.
+* `allowedLocations` Specifies other allowed docks for the view. The value is an array containing any combination of the above described locations. **Note**: make sure to always contain the default location in this array to avoid undefined behavior. The default value is set to `['bottom']`.
+* `columns` An array of column specifications. The default value is `[]`
+* `defaultLocation` Specifies the dock in which the view should be opened. Allowed locations are `left`, `bottom`, `right`, `top` and `center`. The default location is `bottom`.
+* `hideCellBorders` Hides all borders of each table cells. The default value is `no`/`false`.
+* `hideHorizontalCellBorders` Hides only the horizontal borders of each table cell. The default value is `no`/`false`.
+* `hideTableHead` Hides the fixed header which contains the column names. If this is set to `no`/`false` the background color of the row elements is set to the table heads background color. The default value for this property is `no`/`false`.
+* `hideVerticalCellBorders` Hides only the vertical borders of each table cell. The default value is `no`/`false`.
+* `labels` An array with label specifications. The default value is `[]`.
+* `maxLines` Defines the maximal amount of lines that can get added to the table view. The default value is set to `500`.
+* `title` The title in the tab of the corresponding Flexible-Panel view
+* `useMonospaceFont` Uses monospace font for the table. The default value is `no`/`false`.
 
+The column specification array contains an object of properties for each column. The columns are ordered the same way the array is. The column specification object has the following properties
+
+* `align` `<string>` Specifies the column alignment. The value can be `left`, `center` or `right`. The default value is `left`
+* `fixedWidth` `<number>` Specifies the absolute width. If this value is set to a number unequals 0 then the column will keep this size even if the table size changes. If the value is set to 0 the column width will be set dynamically. The default value is `0`. **Note**: If all columns in the table will have dynamic column widths the result may not be as expected. Therefore it makes sense to fix some columns in size and let the other columns take up the rest of available width.
+* `indentWrappedText` `<boolean>` If this value is set to true the text which is wrapped automatically will be indented to the right. This increases readability for columns containing long texts. The default value is `no`.
+* `name` `<string>` This property specifies the name of the column. The name will be displayed in the fixed table header. The default value is `Column <number>` where number is the index of the column starting with `1`;
+* `type` `<string>` This property specifies which type of data is displayed in the column. The value should be `text`, `label` or `time` where `text` represents plain text, `label` is a colored text badge and `time` is the time when the entry was inserted into the table.
 
 ## Examples
 

@@ -12,6 +12,8 @@ class TableView
     @config.hideHorizontalCellBorders ?= no
     @config.useMonospaceFont ?= no
 
+    console.log @columns
+
     @element = document.createElement 'div'
     @element.classList.add 'table-wrapper'
 
