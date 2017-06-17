@@ -116,6 +116,7 @@ Returns an array of allowed locations of the given Flexible-Panel
 ## Examples
 In this section we will give a few examples on how the Flexible-Panel view can be customized and configured.
 
+The following example will become a simple command log for IDE like packages:
 ```coffeescript
   consumeFlexiblePanels: (flexiblePanelsManager) ->
     # specify the columns for the flexible panel view
@@ -142,19 +143,10 @@ In this section we will give a few examples on how the Flexible-Panel view can b
     # get the view from the view manager. Since we get a promise we have to
     # resolve it and store the resolved view element in our variable
     promise = flexiblePanelsManager.createFlexiblePanel {
-      title: 'Console'                        # The title of the corresponding view tab
-      defaultLocation: 'bottom'               # Specifies the dock in which the view should be opened
-      allowedLocations: ['bottom', 'center']  # Specifies other allowed docks for the view
-      addClearButton: yes                     # Adds a button that can clear the contents
-      addSaveButton: yes                      # Adds a button that will save the table contents
-      maxLines: 50                            # Represents the max number of lines that are allowed
-      hideTableHead: no                       # Hides the fixed header
-      hideCellBorders: no                     # Hides any borders of each table cells
-      hideVerticalCellBorders: no             # Hides only the vertical borders of each table cell
-      hideHorizontalCellBorders: no           # Hides only the horizontal borders of each table cell
-      useMonospaceFont: yes                   # Uses monospace font for the table
-      columns: cols                           # An array with column specifications
-      labels: lbls                            # An array with label specifications
+      title: 'Console'
+      columns: cols
+      labels: lbls
+      useMonospaceFont: yes
     }
 
     # resolve promise to actual view element
@@ -164,9 +156,13 @@ In this section we will give a few examples on how the Flexible-Panel view can b
       consoleView.addEntry ['command', 'mkdir /Users/dlux/Desktop/test/build', '']
       consoleView.addEntry ['command', 'touch /Users/dlux/Desktop/test/main.c', '']
       consoleView.addEntry ['message', 'Successfully created directories and main.c file', '']
-      consoleView.addEntry ['log', 'veeeeeeery -long -command -with a lot -of --parameters and -flags that -should -be -wrapped' +
-        '-to next -line -automatically', '']
+      consoleView.addEntry ['log', 'veeeeeeery -long -command -with a lot -of --parameters and -flags that' +
+        '-should -be -wrapped -to next -line -automatically', '']
 ```
+The result looks like this
+<p align="center">
+  <img src="https://github.com/dmlux/flexible-panel/blob/master/screenshots/example-1.png?raw=true">
+</p>
 
 ## Authors
 - [Denis-Michael Lux](https://www.github.com/dmlux/)<sup>(owner)</sup>
