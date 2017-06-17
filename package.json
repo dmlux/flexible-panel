@@ -7,7 +7,7 @@
     "console", "message-panel", "panel", "message", "flexible", "configurable", "service",
     "label", "text", "time", "log", "docks", "dock"
   ],
-  "repository": "https://github.com/atom/flexible-panel",
+  "repository": "https://github.com/dmlux/flexible-panel",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
