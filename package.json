@@ -1,11 +1,22 @@
 {
   "name": "flexible-panels",
   "main": "./lib/flexible-panel",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17",
   "keywords": [
-    "console", "message-panel", "panel", "message", "flexible", "configurable", "service",
-    "label", "text", "time", "log", "docks", "dock"
+    "console",
+    "message-panel",
+    "panel",
+    "message",
+    "flexible",
+    "configurable",
+    "service",
+    "label",
+    "text",
+    "time",
+    "log",
+    "docks",
+    "dock"
   ],
   "repository": "https://github.com/dmlux/flexible-panel",
   "license": "MIT",
