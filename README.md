@@ -164,6 +164,8 @@ The result looks as follows
   <img src="https://github.com/dmlux/flexible-panel/blob/master/screenshots/example-1.png?raw=true">
 </p>
 
+If you want to develop a Linter like package the following configuration may be the right
+
 ```coffeescript
   consumeFlexiblePanels: (flexiblePanelsManager) ->
     # specify the columns for the flexible panel view
@@ -190,7 +192,8 @@ The result looks as follows
       labels: lbls
       hideVerticalCellBorders: yes
       hideTableHead: yes
-      #useMonospaceFont: yes
+      addSaveButton: no
+      addClearButton: no
 
     # resolve promise to actual view element
     promise.then (view) =>
