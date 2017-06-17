@@ -1,10 +1,10 @@
-# Atom Flexible-Panels
-An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17
-
 <p align="left">
   <img src="https://img.shields.io/dub/l/vibe-d.svg" alt="License MIT">
   <img src="https://img.shields.io/badge/version-1.0.0-orange.svg" alt="Package version">
 </p>
+
+# Atom Flexible-Panels
+An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17
 
 <p align="center">
   <img src="https://github.com/dmlux/flexible-panel/blob/master/screenshots/preview.gif?raw=true">
