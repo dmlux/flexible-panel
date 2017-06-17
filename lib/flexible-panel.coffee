@@ -8,11 +8,23 @@ module.exports = FlexiblePanel =
 
     # specify the columns for the flexible panel view
     cols = [
-        name: "Type", align: "center", fixedWidth: 65, type: "text"
+        name: 'Type', align: 'center', fixedWidth: 65, type: 'label'
       ,
-        name: "Description", indentWrappedText: yes
+        name: 'Description', indentWrappedText: yes
       ,
-        name: "Time", align: "center", fixedWidth: 65, type: "time"
+        name: 'Time', align: 'center', fixedWidth: 115, type: 'time'
+    ]
+
+    lbls = [
+        type: 'command', background: '#e67e22', color: '#ffffff'
+      ,
+        type: 'message', background: '#3498db', color: '#ffffff'
+      ,
+        type: 'error', background: '#c0392b'
+      ,
+        type: 'warning', color: '#ffffff'
+      ,
+        type: 'plain', background: 'transparent', color: '#ffffff'
     ]
 
     # a variable that will keep the actual view
@@ -31,15 +43,19 @@ module.exports = FlexiblePanel =
       hideCellBorders: no
       hideVerticalCellBorders: no
       hideHorizontalCellBorders: no
+      useMonospaceFont: no
       columns: cols
+      labels: lbls
     }
 
     # resolve promise to actual view element
     promise.then (view) =>
       consoleView = view
-      for i in [1..100]
-        consoleView.addEntry ["#{i}", "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
-
+      for i in [1..25]
+        consoleView.addEntry ["command", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
+        consoleView.addEntry ["message", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
+        consoleView.addEntry ["error", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
+        consoleView.addEntry ["waning", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
 
     # add toggle command to subscriptions
     @subscriptions = new CompositeDisposable

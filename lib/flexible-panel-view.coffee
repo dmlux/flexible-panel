@@ -10,6 +10,7 @@ class FlexiblePanelView
     @config.defaultLocation ?= 'bottom'
     @config.allowedLocations ?= ['bottom']
     @config.columns ?= []
+    @config.labels ?= []
 
     for col, idx in @config.columns
       col.align ?= 'left'
@@ -17,6 +18,11 @@ class FlexiblePanelView
       col.fixedWidth ?= 0
       col.indentWrappedText ?= no
       col.type ?= 'text'
+
+    for lbl in @config.labels
+      lbl.type ?= 'none'
+      lbl.background ?= 'inherit'
+      lbl.color ?= 'inherit'
 
     @element = document.createElement 'div'
     @element.classList.add 'flexible-panel'
@@ -38,8 +44,9 @@ class FlexiblePanelView
     tableConfig.hideCellBorders = @config.hideCellBorders if @config.hideCellBorders?
     tableConfig.hideVerticalCellBorders = @config.hideVerticalCellBorders if @config.hideVerticalCellBorders?
     tableConfig.hideHorizontalCellBorders = @config.hideHorizontalCellBorders if @config.hideHorizontalCellBorders?
+    tableConfig.useMonospaceFont = @config.useMonospaceFont if @config.useMonospaceFont?
 
-    @tableView = new TableView @config.columns, tableConfig
+    @tableView = new TableView @config.columns, @config.labels, tableConfig
     @element.appendChild @tableView.getView()
 
   _onClear: (event) =>

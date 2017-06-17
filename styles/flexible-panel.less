@@ -83,42 +83,49 @@
       border-collapse: collapse;
     }
 
+    .table.monospace-font {
+      font-weight: lighter;
+      font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    }
+
     .tr {
       display: table-row;
     }
 
     .td {
       display: table-cell;
-      padding: 2px 5px;
       border-left: 1px solid @base-border-color;
       border-top: 1px solid @base-border-color;
-      vertical-align: middle;
-      white-space: pre-wrap;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
+      overflow: hidden;
+      padding: 2px;
 
       div.cell-content {
         display: inline-block;
         height: 100%;
         width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        border-radius: @component-border-radius;
 
         span {
+          display: inline-block;
+          vertical-align: middle;
+          text-overflow: ellipsis;
+          white-space: pre-wrap;
+          padding: 0px 3px;
+        }
+
+        div.pseudo {
+          content: '';
+          height: 100%;
           display: inline-block;
           vertical-align: middle;
         }
       }
 
-      div.cell-content.indent-wrapped-text {
-        padding-left: 20px;
+      div.cell-content.indent-wrapped-text > span {
+        padding-left: 13px;
         text-indent: -10px;
-      }
-
-      div.pseudo {
-        content: '';
-        height: 100%;
-        background: red;
-        display: inline-block;
-        vertical-align: middle;
       }
     }
 

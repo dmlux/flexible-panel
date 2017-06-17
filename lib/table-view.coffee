@@ -3,13 +3,16 @@ elementResizeDetectorMaker = require 'element-resize-detector'
 module.exports =
 class TableView
 
-  constructor: (@columns, @config) ->
+  constructor: (@columns, @labels, @config) ->
     @config ?= {}
     @config.maxLines ?= 500
     @config.hideTableHead ?= no
     @config.hideCellBorders ?= no
     @config.hideVerticalCellBorders ?= no
     @config.hideHorizontalCellBorders ?= no
+    @config.useMonospaceFont ?= no
+
+    console.log @config
 
     @element = document.createElement 'div'
     @element.classList.add 'table-wrapper'
@@ -22,6 +25,7 @@ class TableView
 
     headTable = document.createElement 'div'
     headTable.classList.add 'table'
+    headTable.classList.add 'monospace-font' if @config.useMonospaceFont
 
     headRow = document.createElement 'div'
     headRow.classList.add 'tr'
@@ -59,6 +63,7 @@ class TableView
 
     bodyTable = document.createElement 'div'
     bodyTable.classList.add 'table', 'native-key-bindings'
+    bodyTable.classList.add 'monospace-font' if @config.useMonospaceFont
     bodyTable.tabIndex = -1
 
     @tableBody = document.createElement 'div'
@@ -79,7 +84,7 @@ class TableView
       headCells = @tableHead.querySelectorAll 'div.td'
 
       for cell, idx in bodyCells
-        if @columns[idx].fixedWidth == 0 and not @config.hideTableHead
+        if @columns[idx].fixedWidth is 0 and not @config.hideTableHead
           headCells[idx].style.width = "#{cell.offsetWidth}px"
           headCells[idx].style.minWidth = "#{cell.offsetWidth}px"
           headCells[idx].style.maxWidth = "#{cell.offsetWidth}px"
@@ -97,13 +102,30 @@ class TableView
 
     for value, idx in @columns
       cellContent = document.createElement 'div'
-      cellContent.classList.add 'indent-wrapped-text' if @columns[idx].indentWrappedText
       cellContent.classList.add 'cell-content'
+      cellContent.classList.add 'indent-wrapped-text' if @columns[idx].indentWrappedText
 
       cellText = document.createElement 'span'
-      cellText.innerHTML = columns[idx]
 
-      #cellContent.innerHTML = columns[idx]
+      if @columns[idx].type is 'text'
+        cellText.innerHTML = columns[idx]
+
+      else if @columns[idx].type is 'time'
+        cellText.innerHTML = @getTime()
+
+      else if @columns[idx].type is 'label'
+        label = (e for e in @labels when e.type is columns[idx])[0]
+
+        if label?
+          cellText.innerHTML = columns[idx]
+          cellContent.style.background = label.background
+          cellContent.style.color = label.color
+
+        else
+          cellText.innerHTML = 'undefined'
+          cellContent.style.background = '#cc0000'
+          cellContent.style.color = '#ffffff'
+
       pseudo = document.createElement 'div'
       pseudo.classList.add 'pseudo'
 
@@ -140,9 +162,29 @@ class TableView
     headCells = @tableHead.querySelectorAll 'div.td'
 
     for td, idx in headCells
-      td.removeAttribute 'style' if @columns[idx].fixedWidth == 0
+      td.removeAttribute 'style' if @columns[idx].fixedWidth is 0
 
     @emptyMessage.classList.remove 'hidden'
 
   getView: ->
     @element
+
+  getTime: ->
+    date = new Date
+
+    hours = date.getHours()
+    minutes = date.getMinutes()
+    seconds = date.getSeconds()
+    milliseconds = date.getMilliseconds()
+
+    hours = "0#{hours}" if hours < 10
+    minutes = "0#{minutes}" if minutes < 10
+    seconds = "0#{seconds}" if seconds < 10
+
+    if milliseconds < 10
+      milliseconds = "0#{milliseconds}"
+
+    if milliseconds < 100
+      milliseconds = "0#{milliseconds}"
+
+    "#{hours}:#{minutes}:#{seconds}.#{milliseconds}"
