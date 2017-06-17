@@ -28,15 +28,7 @@ To be able to use Flexible-Panels in your project you have to include the follow
 ```
 You should have installed this package to consume the service mentioned in the property above. If you develop packages and need this package as a dependency we recommend using the `npm` library [Atom-Package-Deps](https://www.npmjs.com/package/atom-package-deps).
 
-In your main package file you should also include the following function in Coffeescript:
-
-```coffeescript
-  consumeFlexiblePanels: (flexiblePanelsManager) ->
-    # Create flexible panel view and add entries here...
-```
-
-If you are coding in Javascript instead the following function has to be added:
-
+In your main package file you should also include the following function:
 ```javascript
   consumeFlexiblePanels(flexiblePanelsManager) {
     // Create flexible panel view and add entries here...
@@ -117,47 +109,45 @@ Returns an array of allowed locations of the given Flexible-Panel
 In this section we will give a few examples on how the Flexible-Panel view can be customized and configured.
 
 The following example will become a simple command log for IDE like packages:
-```coffeescript
-  consumeFlexiblePanels: (flexiblePanelsManager) ->
-    # specify the columns for the flexible panel view
-    cols = [
-        name: 'Type', align: 'center', fixedWidth: 65, type: 'label'
-      ,
-        name: 'Description', indentWrappedText: yes
-      ,
-        name: 'Time', align: 'center', fixedWidth: 95, type: 'time'
+```javascript
+  consumeFlexiblePanels(flexiblePanelsManager) {
+    // specify the columns for the flexible panel view
+    const cols = [
+      {name: 'Type', align: 'center', fixedWidth: 65, type: 'label'},
+      {name: 'Description', indentWrappedText: true},
+      {name: 'Time', align: 'center', fixedWidth: 95, type: 'time'}
+    ];
+
+    // specify the labels that can be used within the view
+    const lbls = [
+      {type: 'command', background: '#F75D59', color: '#fff'},
+      {type: 'message', background: '#3090C7', color: '#fff'},
+      {type: 'log', background: '#8E5287', color: '#fff'}
     ]
 
-    # specify the labels that can be used within the view
-    lbls = [
-        type: 'command', background: '#F75D59', color: '#fff'
-      ,
-        type: 'message', background: '#3090C7', color: '#fff'
-      ,
-        type: 'log', background: '#8E5287', color: '#fff'
-    ]
+    // a variable that will keep the actual view
+    let consoleView = null
 
-    # a variable that will keep the actual view
-    consoleView = null
+    // get the view from the view manager. Since we get a promise we have to
+    // resolve it and store the resolved view element in our variable
+    const promise = flexiblePanelsManager.createFlexiblePanel({
+      title: 'Console',
+      columns: cols,
+      labels: lbls,
+      useMonospaceFont: true
+    });
 
-    # get the view from the view manager. Since we get a promise we have to
-    # resolve it and store the resolved view element in our variable
-    promise = flexiblePanelsManager.createFlexiblePanel
-      title: 'Console'
-      columns: cols
-      labels: lbls
-      useMonospaceFont: yes
-      hideVerticalCellBorders: yes
-
-    # resolve promise to get the actual view element
-    promise.then (view) =>
-      consoleView = view
-      consoleView.addEntry ['command', 'mkdir /Users/dlux/Desktop/test', '']
-      consoleView.addEntry ['command', 'mkdir /Users/dlux/Desktop/test/build', '']
-      consoleView.addEntry ['command', 'touch /Users/dlux/Desktop/test/main.c', '']
-      consoleView.addEntry ['message', 'Successfully created directories and main.c file', '']
-      consoleView.addEntry ['log', 'veeeeeeery -long -command -with a lot -of --parameters and -flags that' +
-        '-should -be -wrapped -to next -line -automatically', '']
+    // resolve promise to get the actual view element
+    promise.then((view) => {
+      consoleView = view;
+      consoleView.addEntry(['command', 'mkdir /Users/dlux/Desktop/test', '']);
+      consoleView.addEntry(['command', 'mkdir /Users/dlux/Desktop/test/build', '']);
+      consoleView.addEntry(['command', 'touch /Users/dlux/Desktop/test/main.c', '']);
+      consoleView.addEntry(['message', 'Successfully created directories and main.c file', '']);
+      consoleView.addEntry(['log', 'veeeeeeery -long -command -with a lot -of --parameters and -flags that' +
+        '-should -be -wrapped -to next -line -automatically', '']);
+    });
+  }
 ```
 The result looks as follows
 <p align="center">
@@ -166,45 +156,46 @@ The result looks as follows
 
 If you want to develop a Linter like package the following configuration may be the right
 
-```coffeescript
-  consumeFlexiblePanels: (flexiblePanelsManager) ->
-    # specify the columns for the flexible panel view
-    cols = [
-        name: 'Type', align: 'center', fixedWidth: 60, type: 'label'
-      ,
-        name: 'Description', indentWrappedText: yes
+```javascript
+  consumeFlexiblePanels(flexiblePanelsManager) {
+    // specify the columns for the flexible panel view
+    const cols = [
+      {name: 'Type', align: 'center', fixedWidth: 60, type: 'label'},
+      {name: 'Description', indentWrappedText: true}
     ]
 
-    lbls = [
-        type: 'error', background: '#F63E2E', color: '#fff'
-      ,
-        type: 'warning', background: '#FFA437', color: '#fff'
+    const lbls = [
+      {type: 'error', background: '#F63E2E', color: '#fff'},
+      {type: 'warning', background: '#FFA437', color: '#fff'}
     ]
 
-    # a variable that will keep the actual view
-    consoleView = null
+    // a variable that will keep the actual view
+    let consoleView = null;
 
-    # get the view from the view manager. Since we get a promise we have to
-    # resolve it and store the resolved view element in our variable
-    promise = flexiblePanelsManager.createFlexiblePanel
-      title: 'Console'
-      columns: cols
-      labels: lbls
-      hideVerticalCellBorders: yes
-      hideTableHead: yes
-      addSaveButton: no
-      addClearButton: no
+    // get the view from the view manager. Since we get a promise we have to
+    // resolve it and store the resolved view element in our variable
+    const promise = flexiblePanelsManager.createFlexiblePanel({
+      title: 'Console',
+      columns: cols,
+      labels: lbls,
+      hideVerticalCellBorders: true,
+      hideTableHead: true,
+      addSaveButton: false,
+      addClearButton: false
+    })
 
-    # resolve promise to actual view element
-    promise.then (view) =>
-      consoleView = view
-      consoleView.addEntry ['warning', 'comparison between pointer and integer']
-      consoleView.addEntry ['error', 'floppyto.c:782: parse error at end of input']
-      consoleView.addEntry ['error', 'usr/lib/crt0.o: Undefined symbol _main referenced from text segment']
-      consoleView.addEntry ['error', 'Undefined symbol _initscr referenced from text segment']
-      consoleView.addEntry ['warning', 'passing arg 1 of \'cpystr\' makes integer from pointer']
-      consoleView.addEntry ['error', 'parse error at end of input']
-      consoleView.addEntry ['warning', 'implicit declaration of function `...\'']
+    // resolve promise to actual view element
+    promise.then((view) => {
+      consoleView = view;
+      consoleView.addEntry(['warning', 'comparison between pointer and integer']);
+      consoleView.addEntry(['error', 'floppyto.c:782: parse error at end of input']);
+      consoleView.addEntry(['error', 'usr/lib/crt0.o: Undefined symbol _main referenced from text segment']);
+      consoleView.addEntry(['error', 'Undefined symbol _initscr referenced from text segment']);
+      consoleView.addEntry(['warning', 'passing arg 1 of \'cpystr\' makes integer from pointer']);
+      consoleView.addEntry(['error', 'parse error at end of input']);
+      consoleView.addEntry(['warning', 'implicit declaration of function `...\'']);
+    })
+  }
 ```
 The result looks as follows:
 <p align="center">
