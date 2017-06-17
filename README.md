@@ -114,8 +114,59 @@ Returns an array of allowed locations of the given Flexible-Panel
 
 
 ## Examples
+In this section we will give a few examples on how the Flexible-Panel view can be customized and configured.
 
+```coffeescript
+  consumeFlexiblePanels: (flexiblePanelsManager) ->
+    # specify the columns for the flexible panel view
+    cols = [
+        name: 'Type', align: 'center', fixedWidth: 65, type: 'label'
+      ,
+        name: 'Description', indentWrappedText: yes
+      ,
+        name: 'Time', align: 'center', fixedWidth: 95, type: 'time'
+    ]
 
+    # specify the labels that can be used within the view
+    lbls = [
+        type: 'command', background: '#F75D59', color: '#fff'
+      ,
+        type: 'message', background: '#3090C7', color: '#fff'
+      ,
+        type: 'log', background: '#8E5287', color: '#fff'
+    ]
+
+    # a variable that will keep the actual view
+    consoleView = null
+
+    # get the view from the view manager. Since we get a promise we have to
+    # resolve it and store the resolved view element in our variable
+    promise = flexiblePanelsManager.createFlexiblePanel {
+      title: 'Console'                        # The title of the corresponding view tab
+      defaultLocation: 'bottom'               # Specifies the dock in which the view should be opened
+      allowedLocations: ['bottom', 'center']  # Specifies other allowed docks for the view
+      addClearButton: yes                     # Adds a button that can clear the contents
+      addSaveButton: yes                      # Adds a button that will save the table contents
+      maxLines: 50                            # Represents the max number of lines that are allowed
+      hideTableHead: no                       # Hides the fixed header
+      hideCellBorders: no                     # Hides any borders of each table cells
+      hideVerticalCellBorders: no             # Hides only the vertical borders of each table cell
+      hideHorizontalCellBorders: no           # Hides only the horizontal borders of each table cell
+      useMonospaceFont: yes                   # Uses monospace font for the table
+      columns: cols                           # An array with column specifications
+      labels: lbls                            # An array with label specifications
+    }
+
+    # resolve promise to actual view element
+    promise.then (view) =>
+      consoleView = view
+      consoleView.addEntry ['command', 'mkdir /Users/dlux/Desktop/test', '']
+      consoleView.addEntry ['command', 'mkdir /Users/dlux/Desktop/test/build', '']
+      consoleView.addEntry ['command', 'touch /Users/dlux/Desktop/test/main.c', '']
+      consoleView.addEntry ['message', 'Successfully created directories and main.c file', '']
+      consoleView.addEntry ['log', 'veeeeeeery -long -command -with a lot -of --parameters and -flags that -should -be -wrapped' +
+        '-to next -line -automatically', '']
+```
 
 ## Authors
 - [Denis-Michael Lux](https://www.github.com/dmlux/)<sup>(owner)</sup>
