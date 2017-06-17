@@ -33,12 +33,10 @@ class PanelControls
     @filterInput.addEventListener 'input', listener
 
   setSaveListener: (listener) ->
-    if @config.addSaveButton
-      @saveBtn.addEventListener 'click', listener
+    @saveBtn.addEventListener 'click', listener if @config.addSaveButton
 
   setClearListener: (listener) ->
-    if @config.addClearButton
-      @clearBtn.addEventListener 'click', listener
+    @clearBtn.addEventListener 'click', listener if @config.addClearButton
 
   getView: ->
     @element

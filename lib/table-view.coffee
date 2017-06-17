@@ -12,8 +12,6 @@ class TableView
     @config.hideHorizontalCellBorders ?= no
     @config.useMonospaceFont ?= no
 
-    console.log @config
-
     @element = document.createElement 'div'
     @element.classList.add 'table-wrapper'
 
@@ -57,6 +55,11 @@ class TableView
     @emptyMessage.classList.add 'empty-message'
     @emptyMessage.innerHTML = 'No data to show'
     @element.appendChild @emptyMessage
+
+    @noMatchMessage = document.createElement 'div'
+    @noMatchMessage.classList.add 'no-match-message', 'hidden'
+    @noMatchMessage.innerHTML = 'No match found'
+    @element.appendChild @noMatchMessage
 
     @bodyWrapper = document.createElement 'div'
     @bodyWrapper.classList.add 'table-body-wrapper'
@@ -160,9 +163,7 @@ class TableView
     @childCount = 0
 
     headCells = @tableHead.querySelectorAll 'div.td'
-
-    for td, idx in headCells
-      td.removeAttribute 'style' if @columns[idx].fixedWidth is 0
+    td.removeAttribute 'style' for td, idx in headCells when @columns[idx].fixedWidth is 0
 
     @emptyMessage.classList.remove 'hidden'
 
@@ -180,11 +181,7 @@ class TableView
     hours = "0#{hours}" if hours < 10
     minutes = "0#{minutes}" if minutes < 10
     seconds = "0#{seconds}" if seconds < 10
-
-    if milliseconds < 10
-      milliseconds = "0#{milliseconds}"
-
-    if milliseconds < 100
-      milliseconds = "0#{milliseconds}"
+    milliseconds = "0#{milliseconds}" if milliseconds < 10
+    milliseconds = "0#{milliseconds}" if milliseconds < 100
 
     "#{hours}:#{minutes}:#{seconds}.#{milliseconds}"

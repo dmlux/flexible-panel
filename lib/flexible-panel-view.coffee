@@ -1,4 +1,6 @@
 {CompositeDisposable, Disposable} = require 'atom'
+App = require('electron').remote;
+fs = require 'fs'
 
 PanelControls = require './panel-controls'
 TableView = require './table-view'
@@ -8,16 +10,20 @@ class FlexiblePanelView
 
   constructor: (@config) ->
     @config.defaultLocation ?= 'bottom'
+    @config.defaultLocation = 'bottom' if not (@config.defaultLocation in ['bottom', 'top', 'left', 'right', 'center'])
     @config.allowedLocations ?= ['bottom']
+    @config.allowedLocations = @config.allowedLocations.filter (location) -> location in ['bottom', 'top', 'left', 'right', 'center']
     @config.columns ?= []
     @config.labels ?= []
 
     for col, idx in @config.columns
-      col.align ?= 'left'
       col.name ?= "Column #{idx + 1}"
       col.fixedWidth ?= 0
       col.indentWrappedText ?= no
+      col.align ?= 'left'
+      col.align = 'left' if not (col.align in ['left', 'center', 'right'])
       col.type ?= 'text'
+      col.type = 'text' if not (col.type in ['text', 'time', 'label'])
 
     for lbl in @config.labels
       lbl.type ?= 'none'
@@ -50,15 +56,39 @@ class FlexiblePanelView
     @element.appendChild @tableView.getView()
 
   _onClear: (event) =>
-    console.log 'clear content'
-
     @tableView.clear()
 
     event.preventDefault()
     event.stopPropagation()
 
   _onSave: (event) =>
-    console.log 'save content'
+    headRows = @tableView.tableHead.children
+    bodyRows = @tableView.tableBody.children
+    text = ''
+
+    for row in headRows
+      rowText = ''
+      tds = row.querySelectorAll 'div.td'
+      rowText += "#{td.innerHTML} " for td in tds
+      text += "#{rowText}\n"
+
+    for row in bodyRows
+      rowText = ''
+      spans = row.querySelectorAll 'span'
+      rowText += "#{span.innerHTML} " for span in spans
+      text += "#{rowText}\n"
+
+    dialog = App.dialog;
+
+    dialog.showSaveDialog (filename) =>
+      if not filename?
+        atom.notifications.addInfo "#{@config.title} content not saved",
+          detail: 'You did not entered a file name'
+      else
+        fs.writeFile filename, text, (err) =>
+          if err?
+            atom.notifications.addError "Could not save #{@config.title} content",
+              detail: "An error ocurred creating the file #{err.message}"
 
     event.preventDefault()
     event.stopPropagation()
@@ -66,8 +96,34 @@ class FlexiblePanelView
 
   _onFilter: (event) =>
     filter = event.srcElement.value
+    rows = @tableView.tableBody.children
 
-    console.log filter
+    visibleElements = @tableView.childCount
+
+    for row in rows
+      tds = row.children
+      contains = (td for td in tds when td.querySelector('span').innerHTML.indexOf(filter) isnt -1)
+
+      if contains.length is 0 and not row.classList.contains 'hidden-row'
+        row.classList.add 'hidden-row'
+        visibleElements--
+
+      else if contains.length isnt 0 and row.classList.contains 'hidden-row'
+        row.classList.remove 'hidden-row'
+        visibleElements++
+
+    @tableView.bodyWrapper.scrollTop = @tableView.bodyWrapper.scrollHeight
+
+    if visibleElements is 0
+      @tableView.noMatchMessage.classList.remove 'hidden'
+      @tableView.emptyMessage.classList.add 'hidden' if not @tableView.emptyMessage.classList.contains 'hidden'
+    else
+      @tableView.noMatchMessage.classList.add 'hidden'
+      @tableView.emptyMessage.classList.add 'hidden' if @tableView.childCount > 0
+
+    if filter is ''
+      @tableView.noMatchMessage.classList.add 'hidden' if not @tableView.noMatchMessage.classList.contains 'hidden'
+      @tableView.emptyMessage.classList.remove 'hidden' if visibleElements is 0
 
     event.preventDefault()
     event.stopPropagation()

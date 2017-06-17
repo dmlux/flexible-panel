@@ -15,6 +15,7 @@ module.exports = FlexiblePanel =
         name: 'Time', align: 'center', fixedWidth: 115, type: 'time'
     ]
 
+    # specify the labels that can be used within the view
     lbls = [
         type: 'command', background: '#e67e22', color: '#ffffff'
       ,
@@ -33,19 +34,19 @@ module.exports = FlexiblePanel =
     # get the view from the view manager. Since we get a promise we have to
     # resolve it and store the resolved view element in our variable
     promise = flexibleViewManager.createFlexiblePanel {
-      title: 'Console'
-      defaultLocation: 'bottom'
-      allowedLocations: ['bottom', 'right']
-      addClearButton: yes
-      addSaveButton: yes
-      maxLines: 50
-      hideTableHead: no
-      hideCellBorders: no
-      hideVerticalCellBorders: no
-      hideHorizontalCellBorders: no
-      useMonospaceFont: no
-      columns: cols
-      labels: lbls
+      title: 'Console'                        # The title of the corresponding view tab
+      defaultLocation: 'left'               # Specifies the dock in which the view should be opened
+      allowedLocations: ['left', 'bottom', 'center']  # Specifies other allowed docks for the view
+      addClearButton: yes                     # Adds a button that can clear the contents
+      addSaveButton: yes                      # Adds a button that will save the table contents
+      maxLines: 50                            # Represents the max number of lines that are allowed
+      hideTableHead: no                       # Hides the fixed header
+      hideCellBorders: no                     # Hides any borders of each table cells
+      hideVerticalCellBorders: no             # Hides only the vertical borders of each table cell
+      hideHorizontalCellBorders: no           # Hides only the horizontal borders of each table cell
+      useMonospaceFont: no                    # Uses monospace font for the table
+      columns: cols                           # An array with column specifications
+      labels: lbls                            # An array with label specifications
     }
 
     # resolve promise to actual view element
@@ -55,7 +56,7 @@ module.exports = FlexiblePanel =
         consoleView.addEntry ["command", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
         consoleView.addEntry ["message", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
         consoleView.addEntry ["error", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
-        consoleView.addEntry ["waning", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
+        consoleView.addEntry ["warning", "#{i} Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren", "Sparta!", "Test"]
 
     # add toggle command to subscriptions
     @subscriptions = new CompositeDisposable

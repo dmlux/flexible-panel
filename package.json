@@ -13,6 +13,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "element-resize-detector": "^1.1.12"
+    "element-resize-detector": "^1.1.12",
+    "fs": "0.0.1-security"
   }
 }

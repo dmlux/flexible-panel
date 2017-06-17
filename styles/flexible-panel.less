@@ -38,7 +38,7 @@
     flex: 1 1 auto;
     // font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
-    .empty-message {
+    .no-match-message, .empty-message {
       flex: 0 0 auto;
       display: block;
       padding: 5px;
@@ -47,7 +47,7 @@
       color: @text-color-subtle;
     }
 
-    .empty-message.hidden {
+    .no-match-message.hidden, .empty-message.hidden {
       visibility: hidden;
       display: none;
     }
@@ -90,6 +90,11 @@
 
     .tr {
       display: table-row;
+    }
+
+    .tr.hidden-row {
+      display: none;
+      visibility: hidden;
     }
 
     .td {
