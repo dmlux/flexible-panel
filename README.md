@@ -55,7 +55,7 @@ The following classes and methods can be used to interact with Flexible-Panel in
 A class that is able to create a Flexible-Panel view. It keeps track of all created views and will clean up on destruction. To get correctly working Flexible-Panel views only create those views via this manager.
 
 #### `::createFlexiblePanel(config)`
-Creates a new Flexible-Panel view instance that will be embedded into workspace automatically. The config object contains settings for the Flexible-Panel view that will be created. The following settings can be changed via the config object:
+Creates a new Flexible-Panel view instance that will be embedded into workspace automatically. The config object contains settings for the Flexible-Panel view that will be created. The method returns a promise that has to be resolved before it can be used to store data. The following settings can be changed via the config object:
 
 * `addClearButton` `<boolean>` Adds a button that can clear the table entries. The default value is set to `yes`/`true`.
 * `addSaveButton` `<boolean>` Adds a button that will save the table contents. The default value is set to `yes`/`true`.
@@ -142,14 +142,14 @@ The following example will become a simple command log for IDE like packages:
 
     # get the view from the view manager. Since we get a promise we have to
     # resolve it and store the resolved view element in our variable
-    promise = flexiblePanelsManager.createFlexiblePanel {
+    promise = flexiblePanelsManager.createFlexiblePanel
       title: 'Console'
       columns: cols
       labels: lbls
       useMonospaceFont: yes
-    }
+      hideVerticalCellBorders: yes
 
-    # resolve promise to actual view element
+    # resolve promise to get the actual view element
     promise.then (view) =>
       consoleView = view
       consoleView.addEntry ['command', 'mkdir /Users/dlux/Desktop/test', '']
@@ -159,9 +159,53 @@ The following example will become a simple command log for IDE like packages:
       consoleView.addEntry ['log', 'veeeeeeery -long -command -with a lot -of --parameters and -flags that' +
         '-should -be -wrapped -to next -line -automatically', '']
 ```
-The result looks like this
+The result looks as follows
 <p align="center">
   <img src="https://github.com/dmlux/flexible-panel/blob/master/screenshots/example-1.png?raw=true">
+</p>
+
+```coffeescript
+  consumeFlexiblePanels: (flexiblePanelsManager) ->
+    # specify the columns for the flexible panel view
+    cols = [
+        name: 'Type', align: 'center', fixedWidth: 60, type: 'label'
+      ,
+        name: 'Description', indentWrappedText: yes
+    ]
+
+    lbls = [
+        type: 'error', background: '#F63E2E', color: '#fff'
+      ,
+        type: 'warning', background: '#FFA437', color: '#fff'
+    ]
+
+    # a variable that will keep the actual view
+    consoleView = null
+
+    # get the view from the view manager. Since we get a promise we have to
+    # resolve it and store the resolved view element in our variable
+    promise = flexiblePanelsManager.createFlexiblePanel
+      title: 'Console'
+      columns: cols
+      labels: lbls
+      hideVerticalCellBorders: yes
+      hideTableHead: yes
+      #useMonospaceFont: yes
+
+    # resolve promise to actual view element
+    promise.then (view) =>
+      consoleView = view
+      consoleView.addEntry ['warning', 'comparison between pointer and integer']
+      consoleView.addEntry ['error', 'floppyto.c:782: parse error at end of input']
+      consoleView.addEntry ['error', 'usr/lib/crt0.o: Undefined symbol _main referenced from text segment']
+      consoleView.addEntry ['error', 'Undefined symbol _initscr referenced from text segment']
+      consoleView.addEntry ['warning', 'passing arg 1 of \'cpystr\' makes integer from pointer']
+      consoleView.addEntry ['error', 'parse error at end of input']
+      consoleView.addEntry ['warning', 'implicit declaration of function `...\'']
+```
+The result looks as follows:
+<p align="center">
+  <img src="https://github.com/dmlux/flexible-panel/blob/master/screenshots/example-2.png?raw=true">
 </p>
 
 ## Authors
