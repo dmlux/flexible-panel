@@ -4,7 +4,7 @@
 </p>
 
 # Atom Flexible-Panels
-An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17
+An Atom package that provides a service to create customizable panels for Atoms Docks introduced with version 1.17.
 
 <p align="center">
   <img src="https://github.com/dmlux/flexible-panel/blob/master/screenshots/preview.gif?raw=true">
@@ -13,7 +13,7 @@ An Atom package that provides a customizable panel for Atoms Docks introduced wi
 
 
 ## Introduction
-An Atom package that provides a customizable panel for Atoms Docks introduced with version 1.17. This panel can log all kind of information and displays them as a table. The table columns can be customized before panel creation to provide a simple insert logic. Once a specific configuration is attached to a column all its added contents will get the same configuration and hence will get the same style. The Flexible-Panel view also provides special column types like time columns or label columns. For further information see the examples section.
+An Atom package that provides a service to create customizable panels for Atoms Docks introduced with version 1.17. This panel can log all kind of information and displays them as a table. The table columns can be customized before panel creation to provide a simple insert logic. Once a specific configuration is attached to a column all its added contents will get the same configuration and hence will get the same style. The Flexible-Panel view also provides special column types like time columns or label columns. For further information see the examples section.
 
 ## Set Up
 To be able to use Flexible-Panels in your project you have to include the following properties to your `package.json` file

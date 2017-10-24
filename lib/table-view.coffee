@@ -95,6 +95,7 @@ class TableView
 
   addRow: (columns) ->
     columns.push '' while columns.length < @columns.length
+    # console.log columns
 
     if @tableBody.childElementCount >= @config.maxLines
       @tableBody.removeChild @tableBody.firstChild

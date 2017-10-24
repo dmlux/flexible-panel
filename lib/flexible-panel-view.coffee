@@ -1,3 +1,4 @@
+
 {CompositeDisposable, Disposable} = require 'atom'
 App = require('electron').remote;
 fs = require 'fs'
@@ -130,6 +131,7 @@ class FlexiblePanelView
 
 
   addEntry: (entry) ->
+    # console.log entry
     @tableView.addRow entry
 
 
