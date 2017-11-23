@@ -8,6 +8,44 @@
   display: flex;
   flex-direction: column;
 
+  .hidden {
+    display: none;
+  }
+
+  .pointer-cursor {
+    cursor: pointer;
+  }
+
+  .collapser {
+    width: 0px;
+    margin-right: 15px;
+  }
+
+  .collapser::before {
+    font-size: @font-size;
+    margin-left: 5px;
+    margin-right: 5px !important;
+  }
+
+  .collapsable-list {
+    display: block;
+    list-style-type: none;
+    padding: 0px;
+    margin-left: 15px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+  }
+
+  .collapsable-list > li {
+    padding: 2px 5px;
+    color: @text-color-subtle;
+  }
+
+  .collapsable-list > li:hover {
+    display: block;
+    color: @text-color-highlight;
+  }
+
   .panel-controls {
     display: flex;
     flex-direction: row;

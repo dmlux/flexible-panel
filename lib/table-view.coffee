@@ -80,6 +80,30 @@ class TableView
     ERD = elementResizeDetectorMaker()
     ERD.listenTo @element, @_onResize
 
+  _onRowClick: (self) ->
+    for content in self.getElementsByClassName 'cell-content'
+      # get collapser
+      collapser = content.getElementsByClassName 'collapser'
+
+      # skip if column does not contain collapsable content
+      continue if collapser.length is 0
+
+      collapserDown = collapser[0]
+      collapserRight = collapser[1]
+      collapsableList = content.getElementsByClassName('collapsable-list')[0]
+      ellipsis = content.getElementsByClassName('ellipsis')[0]
+
+      if collapserRight.classList.contains 'hidden'
+        collapserRight.classList.remove 'hidden'
+        collapserDown.classList.add 'hidden'
+        collapsableList.classList.add 'hidden'
+        ellipsis.classList.remove 'hidden'
+      else
+        collapserRight.classList.add 'hidden'
+        collapserDown.classList.remove 'hidden'
+        collapsableList.classList.remove 'hidden'
+        ellipsis.classList.add 'hidden'
+
   _onResize: (event) =>
     if @tableBody.lastChild?
       row = @tableBody.lastChild
@@ -92,6 +116,110 @@ class TableView
           headCells[idx].style.minWidth = "#{cell.offsetWidth}px"
           headCells[idx].style.maxWidth = "#{cell.offsetWidth}px"
 
+  addListRow: (title, columns) ->
+    # console.log "addListRow", title, columns
+    columns.push '' while columns.length < @columns.length
+    # console.log columns
+
+    if @tableBody.childElementCount >= @config.maxLines
+      @tableBody.removeChild @tableBody.firstChild
+      @childCount--
+
+    row = document.createElement 'div'
+    row.classList.add 'tr'
+    row.classList.add 'pointer-cursor'
+    row.addEventListener 'click', => @_onRowClick(row)
+
+    for value, idx in @columns
+      cellContent = document.createElement 'div'
+      cellContent.classList.add 'cell-content'
+
+      cellText = document.createElement 'span'
+
+      if @columns[idx].type is 'text'
+        # create list
+        cellList = document.createElement 'ul'
+        cellList.classList.add 'block'
+        cellList.classList.add 'collapsable-list'
+        cellList.classList.add 'hidden'
+
+        for item in columns[idx]
+          cellListItem = document.createElement 'li'
+          cellListItem.innerHTML = item
+          cellListItem.classList.add 'collapsable-list-item'
+          cellList.appendChild cellListItem
+
+        cellListCollapser = document.createElement 'span'
+        cellListCollapser.classList.add 'collapser'
+        cellListCollapser.classList.add 'collapsed'
+        cellListCollapser.classList.add 'icon'
+        cellListCollapser.classList.add 'icon-chevron-right'
+
+        cellListCollapserExpanded = document.createElement 'span'
+        cellListCollapserExpanded.classList.add 'collapser'
+        cellListCollapserExpanded.classList.add 'expanded'
+        cellListCollapserExpanded.classList.add 'hidden'
+        cellListCollapserExpanded.classList.add 'icon'
+        cellListCollapserExpanded.classList.add 'icon-chevron-down'
+
+        cellListTitle = document.createElement 'span'
+        cellListTitle.innerHTML = "#{title}&nbsp;"
+
+        cellListEllipsis = document.createElement 'span'
+        cellListEllipsis.classList.add 'ellipsis'
+        cellListEllipsis.classList.add 'icon'
+        cellListEllipsis.classList.add 'icon-ellipsis'
+
+        cellText.appendChild cellListCollapserExpanded
+        cellText.appendChild cellListCollapser
+        cellText.appendChild cellListTitle
+        cellText.appendChild cellListEllipsis
+        cellText.appendChild cellList
+
+      else if @columns[idx].type is 'time'
+        cellText.innerHTML = @getTime()
+
+      else if @columns[idx].type is 'label'
+        label = (e for e in @labels when e.type is columns[idx])[0]
+
+        if label?
+          cellText.innerHTML = columns[idx]
+          cellContent.style.background = label.background
+          cellContent.style.color = label.color
+
+        else
+          cellText.innerHTML = 'undefined'
+          cellContent.style.background = '#cc0000'
+          cellContent.style.color = '#ffffff'
+
+      pseudo = document.createElement 'div'
+      pseudo.classList.add 'pseudo'
+
+      cellContent.appendChild pseudo
+      cellContent.appendChild cellText
+
+      cell = document.createElement 'div'
+      cell.classList.add 'td', "align-#{value.align}"
+      cell.classList.add 'no-thead' if @config.hideTableHead
+      cell.classList.add 'no-borders' if @config.hideCellBorders
+      cell.classList.add 'no-vertical-borders' if @config.hideVerticalCellBorders
+      cell.classList.add 'no-horizontal-borders' if @config.hideHorizontalCellBorders
+
+      if @columns[idx].fixedWidth > 0
+        cell.style.width = "#{@columns[idx].fixedWidth}px"
+        cell.style.minWidth = "#{@columns[idx].fixedWidth}px"
+        cell.style.maxWidth = "#{@columns[idx].fixedWidth}px"
+
+      cell.appendChild cellContent
+      row.appendChild cell
+
+    @emptyMessage.classList.add 'hidden' if not @emptyMessage.classList.contains 'hidden'
+    @tableBody.appendChild row
+
+    @childCount++
+    @bodyWrapper.scrollTop = @bodyWrapper.scrollHeight
+
+    @_onResize()
 
   addRow: (columns) ->
     columns.push '' while columns.length < @columns.length

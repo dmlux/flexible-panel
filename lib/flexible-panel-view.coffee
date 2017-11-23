@@ -96,14 +96,22 @@ class FlexiblePanelView
 
 
   _onFilter: (event) =>
-    filter = event.srcElement.value
+    filter = event.srcElement.value.toLowerCase()
     rows = @tableView.tableBody.children
 
     visibleElements = @tableView.childCount
 
     for row in rows
       tds = row.children
-      contains = (td for td in tds when td.querySelector('span').innerHTML.indexOf(filter) isnt -1)
+      contains = []
+
+      for td in tds
+        content = td.querySelector('span').innerHTML
+        content = content.replace /<(?:.|\n)*?>/gm, " "
+        content = content.toLowerCase()
+
+        if content.indexOf(filter) isnt -1
+          contains.push td
 
       if contains.length is 0 and not row.classList.contains 'hidden-row'
         row.classList.add 'hidden-row'
@@ -128,6 +136,11 @@ class FlexiblePanelView
 
     event.preventDefault()
     event.stopPropagation()
+
+
+  addListEntry: (title, entry) ->
+    # console.log "addListEntry", title, entry
+    @tableView.addListRow title, entry
 
 
   addEntry: (entry) ->
