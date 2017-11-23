@@ -1,7 +1,7 @@
 {
   "name": "flexible-panels",
   "main": "./lib/flexible-panel",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An Atom package that provides services to create customizable panels for Atoms Docks introduced with version 1.17",
   "keywords": [
     "console",
