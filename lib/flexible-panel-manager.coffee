@@ -21,7 +21,18 @@ class FlexiblePanelManager
         @panels.push panel
         panel
 
-    atom.workspace.toggle(config.URI)
+    atom.workspace.open config.URI
+
+
+  hidePanels: ->
+    for panel in @panels
+      atom.workspace.hide panel.getURI()
+
+
+  showPanels: ->
+    for panel in @panels
+      atom.workspace.open panel.getURI()
+
 
   destroy: ->
     panel.destroy() for panel in @panels
