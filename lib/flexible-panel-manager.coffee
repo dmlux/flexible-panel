@@ -9,7 +9,10 @@ class FlexiblePanelManager
 
   constructor: ->
     @panels = []
-    @subscriptions = new CompositeDisposable
+    @subscriptions = new CompositeDisposable new Disposable ->
+      for item in atom.workspace.getPaneItems()
+        if item instanceof FlexiblePanelView
+          item.destroy()
 
   createFlexiblePanel: (config) ->
     config.UID = FlexiblePanelManager.panelIDs++
@@ -35,5 +38,4 @@ class FlexiblePanelManager
 
 
   destroy: ->
-    panel.destroy() for panel in @panels
     @subscriptions.dispose()
